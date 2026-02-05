@@ -78,7 +78,7 @@ At first glance, a Fibonacci Clock may look confusing, but it follows a simple s
 ### 1. Fibonacci Blocks 
 
 The clock is made up of five blocks, each representing a Fibonacci number:
-![IMG_3446](https://github.com/user-attachments/assets/c4ec8f4d-e9a4-4144-8beb-05903cf582c6)
+MONARCHTECHNO/MyFibonnaciClock/photos/IMG_3410.JPG
 
 Each block may be lit in a different color depending on how it contributes to the time.
 
@@ -109,8 +109,9 @@ Minutes = (Blue blocks + Green blocks) × 5
 
 ### 5. Full Time Example 
 
-**Demo 1
+**Demo**
 
+MONARCHTECHNO/MyFibonnaciClock/photos/IMG_3446.JPG
 
 Red block: 2
 Blue block: 1
@@ -124,39 +125,6 @@ Then:
 Hours = 2 + 5 = 7
 Minutes = (1 + 5) × 5 = 30
 ➡️ The time is 7:30
-
-**Demo 2
-
-Red block: 3
-Blue block: 2
-Green block: 0
-Hour = Red blocks + Green blocks
-
-Minutes = (Blue blocks + Green blocks) × 5
-
-Then:
-
-Hours = 3 = 3
-Minutes = (2) × 5 = 10
-➡️ The time is 3:10
-
-Demo 3
-
-
-If the clock shows:
-
-Red block: 0
-Blue block: 0
-Green block: 3
-Hour = Red blocks + Green blocks Minutes = (Blue blocks + Green blocks) × 5
-
-Then:
-
-Hours = 3 = 5
-Minutes = (3) × 5 = 15
-➡️ The time is 3:15
-
-
 
 
 Huge thanks to the original author for the inspiration!
