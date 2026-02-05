@@ -1,0 +1,20 @@
+{
+  "wifi_ssid": "",
+  "wifi_password": "",
+  "timezone_offset_hours": 8,
+  "brightness": 0.8,
+  "layout_led_counts": [32, 12, 5, 2, 2],
+  "segment_order": [5, 3, 2, 1, 1],
+  "pins": [1, 2, 3, 4, 5],
+  "single_data_pin_mode": false,
+  "single_data_pin": 2,
+  "total_leds_singlepin": 53,
+  "ntp_host": "ntp.aliyun.com",
+  "enable_startup_animation": true,
+  "startup_colors": [
+    [255, 0, 0],
+    [0, 255, 0],
+    [0, 0, 255]
+  ],
+  "startup_timeout_seconds": 60
+}
