@@ -104,21 +104,22 @@ The clock uses five squares with Fibonacci values: 1, 1, 2, 3, 5.
 ![Fibonacci blocks layout](photos/IMG_3446.JPG)  
 *Example of the five blocks and their values*
 
-### 2. Color Meanings
-- **Red** → Contributes to **hours** only  
-- **Blue** → Contributes to **minutes** only  
-- **Green** → Contributes to **both** hours and minutes  
-- **Off (black)** → Not used for current time  
-
-### 3. Reading Hours
-Add the values of all **red** and **green** blocks.  
-Hours = sum(red + green)  
-(12-hour format: 12 = 0)
-
-### 4. Reading Minutes
-Add the values of all **blue** and **green** blocks.  
-Multiply by 5.  
-Minutes = (blue + green) × 5
+### 2. Colors
+ 
+| Color | Counts for |
+|---|---|
+| 🟥 Red | hours |
+| 🟦 Blue | minutes |
+| 🟩 Green | hours **and** minutes |
+| ⬛ Off | nothing |
+ 
+### 3. Hours
+ 
+Add up the **red + green** squares. The clock uses the 12-hour format, so noon and midnight show **12**, with all five squares red.
+ 
+### 4. Minutes
+ 
+Add up the **blue + green** squares and **multiply by 5**. The clock moves in 5-minute steps, so 7:34 is shown as 7:30.
 
 ### 5. Example
 ![Demo at 7:30](photos/IMG_3410.JPG)  
@@ -129,6 +130,14 @@ Minutes = (blue + green) × 5
 → Hours = 2 (red) + 5 (green) = **7**  
 → Minutes = (1 (blue) + 5 (green)) × 5 = **30**  
 **Time shown: 7:30**
+
+### Status lights
+ 
+| What you see | Meaning |
+|---|---|
+| Red/green/blue sweep | Starting up, connecting to WiFi |
+| All yellow for 2 s | WiFi failed or not configured, running offline |
+| Short yellow flash every 30 s | Time has not been synced, so the displayed time may be wrong |
 
 ## Enclosure (STL) & PCB Files
 
