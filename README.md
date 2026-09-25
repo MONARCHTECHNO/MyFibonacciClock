@@ -6,15 +6,17 @@ A beautiful time-telling clock that uses the Fibonacci sequence to display hours
 **Inspired by**  
 [NerdCave.xyz - Fibonacci Clock](https://nerdcave.xyz/docs/projects/fibonnaci-clock/)  
 
-**My Improvements**  
-- Startup WiFi connection animation (color sweep across segments) with configurable timeout and error indication (yellow LEDs on failure)  
-- Real-time brightness control using two physical buttons (GPIO6 = decrease, GPIO7 = increase, 0.1 steps from 0.0–1.0)  
-- Fully configurable via `config.json` (WiFi credentials, timezone, default brightness, LED counts per segment, animation enable/disable, custom animation colors, NTP host, etc.)  
-- Robust error handling, debug prints via serial console, and NTP sync with automatic retries  
-- Support for both multi-pin (independent data lines per segment) and single-pin (daisy-chained) LED wiring modes  
-- Code refactoring for better readability: property-based brightness, modular classes, and clamp/type safety
-
-The core Fibonacci logic (1-1-2-3-5 squares), color rules (Red = hours, Blue = minutes, Green = overlap), and 12-hour display remain faithful to the original for compatibility.
+**What's new in this version**
+- Startup animation – a color sweep runs across the squares while the Pico connects to WiFi. If it can't connect, all squares turn yellow for 2 seconds and the clock continues offline.
+- Config first, safe defaults second – settings are read from config.json. Keys you leave out keep their default, and an invalid value only resets that one key.
+- Responsive brightness buttons – buttons are checked every 20 ms. Press once for one step, or hold to keep changing. Brightness never goes fully dark.
+- Brightness is remembered – 5 seconds after you stop pressing, the level is saved to state.json and restored on the next boot.
+- Random patterns – most times can be shown in several ways (6 = 5+1, 3+2+1, 3+1+1…). Like the original clock, one of them is picked at random each time the display changes.
+- Keeps accurate time – the time is re-synced over NTP every 6 hours. If it has never synced, the Pico retries every 5 minutes and flashes yellow every 30 seconds to warn you.
+- Night mode – from 23:00 to 07:00, brightness is capped at a lower level.
+- Gamma correction – brightness steps look even to the eye, including at the low end.
+- Optional watchdog – if the program ever freezes, the Pico reboots itself automatically.
+- Simpler hardware – one data line per square (the single-pin daisy-chain mode has been removed), and fewer LEDs: 16 + 4 + 2 + 1 + 1 = 24.
 
 ## Features
 
@@ -37,7 +39,47 @@ The core Fibonacci logic (1-1-2-3-5 squares), color rules (Red = hours, Blue = m
 ## Software Requirements
 
 - MicroPython firmware for Pico W (latest stable)  
-- Built-in libraries: `neopixel`, `network`, `ntptime`, `ujson`, `machine`, `time`  
+- Built-in libraries: `neopixel`, `network`, `ntptime`, `ujson`, `machine`, `time`
+
+## Configuration
+ 
+`config.json` only needs the keys you want to change; any key you leave out uses its default.
+ 
+The settings are applied in this order (highest priority first):
+ 
+1. `state.json` – brightness saved from the buttons
+2. `config.json`
+3. Defaults built into `main.py`
+> If you've adjusted brightness with the buttons, changing `brightness` in `config.json` won't have any effect. Delete `state.json` from the Pico to go back to the config value.
+ 
+| Key | Default | Description |
+|---|---|---|
+| `wifi_ssid` / `wifi_password` | `""` | WiFi credentials. If left empty, the clock runs offline |
+| `timezone_offset_hours` | `8` | UTC offset in hours; decimals work, e.g. `5.5` |
+| `ntp_host` | `"ntp.aliyun.com"` | NTP server (fast in China) |
+| `ntp_resync_hours` | `6` | Time between NTP re-syncs |
+| `layout_led_counts` | `[16,4,2,1,1]` | Number of LEDs in each square |
+| `segment_order` | `[5,3,2,1,1]` | Value of each square |
+| `pins` | `[1,2,3,4,5]` | Data pin of each square |
+| `button_down_pin` / `button_up_pin` | `6` / `7` | Brightness button pins |
+| `brightness` | `0.8` | Starting brightness (0.1–1.0) |
+| `min_brightness` | `0.1` | Lowest brightness the buttons can reach |
+| `brightness_step` | `0.1` | Change per button press |
+| `gamma` | `2.2` | Gamma correction; `1.0` turns it off |
+| `night_mode` | `true` | Dim the clock at night |
+| `night_start_hour` / `night_end_hour` | `23` / `7` | Night period |
+| `night_brightness` | `0.2` | Maximum brightness at night |
+| `random_patterns` | `true` | Pick a random pattern among the equivalent ones |
+| `enable_startup_animation` | `true` | Show the WiFi animation at boot |
+| `startup_colors` | red, green, blue | Colors used by the animation, as `[R,G,B]` values |
+| `startup_timeout_seconds` | `60` | How long to wait for WiFi before going offline |
+| `enable_watchdog` | `false` | Automatic reboot if the program freezes |
+ 
+`pins`, `layout_led_counts` and `segment_order` must all have the same length. If they don't, all three fall back to their defaults.
+ 
+### About the watchdog
+ 
+When enabled, the Pico reboots on its own if the program stops responding for 8 seconds. It is off by default because stopping the program from Thonny also triggers a reboot. Turn it on after you've finished testing and the clock is running 24/7.
 
 ## Installation & Usage
 
